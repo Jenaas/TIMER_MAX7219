@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "max7219.h"
+#include "milis.h"
 
 /* Makra na Porty a Piny*/
 #define CLK_GPIO GPIOB     
@@ -103,7 +104,7 @@ int main(void)
     max7219_send(DIGIT6, 0);
     max7219_send(DIGIT7, 0);
 
-    uint8_t time = 0;
+    uint32_t time = 0;
     uint8_t number = 0;
     uint8_t desitky = 0;
     uint8_t stovky = 0;
