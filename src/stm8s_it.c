@@ -27,13 +27,14 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm8s_it.h"
-
+#include "main.h"
 #include "milis.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+extern uint32_t vlastni_cas;
 /* Private function prototypes -----------------------------------------------*/
 extern void TimingDelay_Decrement(void);
 /* Private functions ---------------------------------------------------------*/
@@ -271,9 +272,8 @@ INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, 12)
   */
  INTERRUPT_HANDLER(TIM2_UPD_OVF_BRK_IRQHandler, 13)
 {
-  /* In order to detect unexpected events during development,
-     it is recommended to set a breakpoint on the following instruction.
-  */
+  TIM2_ClearFlag(TIM2_FLAG_UPDATE);
+  vlastni_cas++;
 }
 
 /**

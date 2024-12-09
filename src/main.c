@@ -21,6 +21,8 @@
 #define CS_HIGH GPIO_WriteHigh(CS_GPIO, CS_PIN)
 #define CS_LOW GPIO_WriteLow(CS_GPIO, CS_PIN)
 
+uint32_t vlastni_cas = 0;
+
 /* Nějaká super funkce co posílá data */
 void max7219_send(uint8_t address, uint8_t data)
 {
@@ -64,6 +66,14 @@ void max7219_send(uint8_t address, uint8_t data)
 
     CS_HIGH; 
 }
+void TIM2_init(void)
+{
+    CLK_PeripheralClockConfig(CLK_PERIPHERAL_TIMER2,ENABLE);
+    TIM2_TimeBaseInit(TIM2_PRESCALER_16,999);
+    TIM2_ClearFlag(TIM2_FLAG_UPDATE);
+    TIM2_ITConfig(TIM2_IT_UPDATE,ENABLE);
+    TIM2_Cmd(ENABLE);
+}
 
 void max7219_init(void)
 {   /* Nastavení pinu do začáteční pozice */
@@ -84,16 +94,17 @@ void setup(void)
 {
     CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1); // taktovat MCU na 16MHz
 
-    init_milis();
-    
-
+    //init_milis();
     max7219_init();
+    TIM2_init();
+    enableInterrupts();
 }
 
 int main(void)
 {
 
     setup();
+    
 
     max7219_send(DIGIT0, 0);
     max7219_send(DIGIT1, 0);
@@ -113,9 +124,9 @@ int main(void)
     /* Funkce pro zobrazení čísel */
     while (1)
     {
-        if ((milis() - time) > 200)
+        if ((vlastni_cas - time) > 1000)
         {
-            time = milis();
+            time = vlastni_cas;
             max7219_send(DIGIT0, number);
             max7219_send(DIGIT1, desitky);
             max7219_send(DIGIT2, stovky);

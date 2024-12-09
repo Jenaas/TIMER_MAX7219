@@ -1,3 +1,4 @@
+#include "stdint.h"
 #ifndef _MAIN_H_
 #define _MAIN_H_ 1
 
@@ -34,6 +35,9 @@
 #define LED_PIN  GPIO_PIN_5
 #define BTN_PORT GPIOE
 #define BTN_PIN  GPIO_PIN_4
+
+extern uint32_t vlastni_cas;
+
 #endif
 
 // functions
