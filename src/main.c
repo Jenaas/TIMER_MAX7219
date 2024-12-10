@@ -5,15 +5,15 @@
 #include "max7219.h"
 #include "milis.h"
 
-/* Makra na Porty a Piny*/
-#define CLK_GPIO GPIOB     
-#define CLK_PIN GPIO_PIN_0  
-#define DATA_GPIO GPIOB     
-#define DATA_PIN GPIO_PIN_2 
-#define CS_GPIO GPIOB       
-#define CS_PIN GPIO_PIN_1   
+// makra pro zapojení pinů
+#define CLK_GPIO GPIOB      // port na kterém je CLK vstup
+#define CLK_PIN GPIO_PIN_0  // pin na kterém je CLK vstup
+#define DATA_GPIO GPIOB     // port na kterém je DIN vstup
+#define DATA_PIN GPIO_PIN_2 // pin na kterém je DIN vstup
+#define CS_GPIO GPIOB       // port na kterém je LOAD/CS vstup
+#define CS_PIN GPIO_PIN_1   // pin na kterém je LOAD/CS vstup
 
-/* Makra na práci s Piny */
+// příkazová makra pro přehlednost kódu
 #define CLK_HIGH GPIO_WriteHigh(CLK_GPIO, CLK_PIN)
 #define CLK_LOW GPIO_WriteLow(CLK_GPIO, CLK_PIN)
 #define DATA_HIGH GPIO_WriteHigh(DATA_GPIO, DATA_PIN)
@@ -75,16 +75,16 @@ void TIM2_init(void)
     TIM2_Cmd(ENABLE);
 }
 
-void max7219_init(void)
-{   /* Nastavení pinu do začáteční pozice */
+void max7219_init(void)           // inicializace displeje
+{   
     GPIO_Init(CS_GPIO, CS_PIN, GPIO_MODE_OUT_PP_LOW_SLOW);
     GPIO_Init(CLK_GPIO, CLK_PIN, GPIO_MODE_OUT_PP_LOW_SLOW);
     GPIO_Init(DATA_GPIO, DATA_PIN, GPIO_MODE_OUT_PP_LOW_SLOW);
 
     // nastavíme základní parametry budiče
     max7219_send(DECODE_MODE, DECODE_ALL);        // Nějakej dekodér
-    max7219_send(SCAN_LIMIT, 3);                  // Kolik cifer zapneme
-    max7219_send(INTENSITY, 5);                   // Jas
+    max7219_send(SCAN_LIMIT, 7);                  // Kolik cifer zapneme
+    max7219_send(INTENSITY, 4);                   // Jas
     max7219_send(DISPLAY_TEST, DISPLAY_TEST_OFF); // test displeje
     max7219_send(SHUTDOWN, SHUTDOWN_ON);           // On/OFF
 
@@ -121,7 +121,7 @@ int main(void)
     uint8_t stovky = 0;
     uint8_t tisice = 0;
 
-    /* Funkce pro zobrazení čísel */
+    
     while (1)
     {
         if ((vlastni_cas - time) > 1000)
@@ -131,6 +131,10 @@ int main(void)
             max7219_send(DIGIT1, desitky);
             max7219_send(DIGIT2, stovky);
             max7219_send(DIGIT3, tisice);
+            max7219_send(DIGIT4, 0);
+            max7219_send(DIGIT5, 0);
+            max7219_send(DIGIT6, 0);
+            max7219_send(DIGIT7, 0);
             number++;
             if (number>9){
                 number=0;
