@@ -119,7 +119,6 @@ int main(void)
     uint8_t number = 0;
     uint8_t desitky = 0;
     uint8_t stovky = 0;
-    uint8_t tisice = 0;
 
     
     while (1)
@@ -130,7 +129,7 @@ int main(void)
             max7219_send(DIGIT0, number);
             max7219_send(DIGIT1, desitky);
             max7219_send(DIGIT2, stovky);
-            max7219_send(DIGIT3, tisice);
+            max7219_send(DIGIT3, 0);
             max7219_send(DIGIT4, 0);
             max7219_send(DIGIT5, 0);
             max7219_send(DIGIT6, 0);
@@ -145,14 +144,9 @@ int main(void)
                 desitky = 0;
             }
             if (stovky > 9){
-                tisice++;
-                stovky =0;
-            }
-            if (tisice > 9){
                 number = 0;
                 desitky = 0;
-                stovky = 0;
-                tisice = 0;
+                stovky = 0; 
             }
 
         }
